@@ -70,7 +70,6 @@ public class ShapefileManager {
             FileDataStoreFactorySpi factory = new ShapefileDataStoreFactory();
             params.put(ShapefileDataStoreFactory.URLP.key, new File(path).toURI().toURL());
             ShapefileDataStore ds = (ShapefileDataStore) factory.createNewDataStore(params);
-            
             //set properties
             SimpleFeatureSource sfs = (SimpleFeatureSource) layer.getFeatureSource();
             //下面这行还有其他写法，根据源shape文件的simpleFeatureType可以不用retype，而直接用fs.getSchema设置  
@@ -82,7 +81,7 @@ public class ShapefileManager {
             //写记录  
             SimpleFeatureIterator it = sfs.getFeatures().features();  
             try {  
-                while (it.hasNext()) {  
+                while (it.hasNext()) {
                     SimpleFeature feature = it.next();  
                     SimpleFeature fNew = writer.next();  
                     fNew.setAttributes(feature.getAttributes());  
@@ -143,6 +142,7 @@ public class ShapefileManager {
     public static void main(String[] args){
 //        ReadShapefile reader = new ReadShapefile();
 //        reader.readShpTest();
+FFeatureManager_Test.addFeatureToLayerTest();
         ShapefileManager sm = new ShapefileManager();
         sm.writeShpTest();
     }
