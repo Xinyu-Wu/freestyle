@@ -178,7 +178,7 @@ public class FFeatureManager_Test {
         String POIID = "126";  
         String MESHID = "0";  
         String OWNER = "sq";  
-  
+        //JsonObject jsonObject=new JsonObject();
         /* Longitude (= x coord) first ! */  
         Point point = geometryFactory.createPoint(new Coordinate(longitude, latitude));  
         Object[] obj = {point, POIID, MESHID, OWNER};  
