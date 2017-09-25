@@ -5,6 +5,7 @@
  */
 package GUI;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -117,7 +118,9 @@ public class Main extends javax.swing.JFrame {
 
     private void importShpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importShpActionPerformed
         try {
+            
             // TODO add your handling code here:
+            
             File file = JFileDataStoreChooser.showOpenFile("shp", null);
             if (file == null) {
                 return;
@@ -172,6 +175,7 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 new Main().setVisible(true);
             }
         });
