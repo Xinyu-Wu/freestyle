@@ -277,7 +277,6 @@ public class PostgreSQLManager {
         manager.postgisConfig.setValidateConnection(true);//why this
 //        manager.postgisConfig.setSchema(featureSource.getSchema().getTypeName());
         try {
-            //        
             SimpleFeatureCollection featureCollection = featureSource.getFeatures();
             //drop suffix name
             String name = file.getName().substring(0,file.getName().lastIndexOf("."));
