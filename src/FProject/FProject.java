@@ -1,47 +1,40 @@
-﻿
-import java.util.ArrayList;
-import java.util.List;
-import net.sf.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.UUID;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.*;
-import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.map.Layer;
-import org.geotools.map.MapContent;
-import org.geotools.swing.data.JFileDataStoreChooser;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package FProject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import net.sf.json.JSONObject;
+import org.geotools.map.Layer;
+import org.geotools.map.MapContent;
+import org.geotools.swing.data.JFileDataStoreChooser;
 
 /**
  *
  * @author 冯雨宁
  */
 public class FProject {
-    private String FName;//工程名
+     private String FName;//工程名
     //private int FLayerNum;//图层数
     private List<String> FLayerID;//图层索引列表
-    private MapContent FMapContent;//图层类
+    //private MapContent FMapContent;//图层类
 
-    public MapContent getFMapContent() {
+    //public MapContent getFMapContent() {
 
-        return FMapContent;
-    }
+        //return FMapContent;
+   // }
 
     public void setFMapContent(MapContent FMapContent) {
-        this.FMapContent = FMapContent;
+        //this.FMapContent = FMapContent;
     }
 
     public void setFName(String FName) {
@@ -75,14 +68,14 @@ public class FProject {
     
      public FProject(){
         FName="";
-        FLayerID= new ArrayList<String>();
-        FMapContent=new MapContent();
+        FLayerID= new ArrayList<>();
+        //FMapContent=new MapContent();
     }
     
     public FProject(String name){
         FName=name;
-        FLayerID= new ArrayList<String>();
-        FMapContent=new MapContent();
+        FLayerID= new ArrayList<>();
+       // FMapContent=new MapContent();
     }
       
     static FProject openFromFile(File file) throws FileNotFoundException, IOException{//从json文件打开
@@ -95,7 +88,7 @@ public class FProject {
     }
     
     public boolean saveFProject(){
-        JSONObject jsonObject = JSONObject.fromObject(this);
+        JSONObject jsonObject=JSONObject.fromObject(this);
         System.out.println(jsonObject);
           
         Boolean bool = false;
@@ -114,8 +107,7 @@ public class FProject {
             fw.close();
             System.out.println("success save file,the file is "+fileNameTemp);
             bool = true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
         }
         
         return bool;    
@@ -123,13 +115,13 @@ public class FProject {
     
     public void addLayer(String id, Layer mLayer){//先把图层存进数据库，再把数据库id作为参数传入
         FLayerID.add(id);
-        FMapContent.addLayer(mLayer);
+        //FMapContent.addLayer(mLayer);
     }
     
     public void deleteLayer(int index){//先获取要删除图层的id，作为参数传入
    
         FLayerID.remove(index);
-        FMapContent.layers().remove(index);
+        //FMapContent.layers().remove(index);
     }
       
     public void moveLayer(int sourcePos, int desPos){//移动图层顺序
@@ -143,10 +135,10 @@ public class FProject {
         {
             FLayerID.add(desPos-1,id);
         }
-       FMapContent.moveLayer(sourcePos, desPos);
+       //FMapContent.moveLayer(sourcePos, desPos);
     }
     
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws IOException {
         String ss="fb";      
         FProject fp = new FProject(ss);
         fp.saveFProject();
@@ -158,5 +150,5 @@ public class FProject {
         
         FProject a=openFromFile(file);
         System.out.println(a.getFName());   
-    }   
+    } 
 }
