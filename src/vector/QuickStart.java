@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package vector;
+import cn.edu.pku.datasource.FFeatureManager_Test;
 import java.io.File;
 
 import org.geotools.data.FileDataStore;
@@ -28,6 +29,8 @@ public class QuickStart {
      */
     public static void main(String[] args) throws Exception {
         // display a data store file chooser dialog for shapefiles
+        
+        FFeatureManager_Test.addFeatureToLayerTest();
         File file = JFileDataStoreChooser.showOpenFile("shp", null);
         if (file == null) {
             return;
