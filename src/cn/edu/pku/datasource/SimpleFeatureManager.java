@@ -49,7 +49,7 @@ import org.opengis.filter.identity.FeatureId;
 /**
  * 对SimpleFeature进行管理的类
  *
- * @version 1.0.1
+ * @version 1.0.2
  * @author sq
  */
 public class SimpleFeatureManager {
@@ -180,10 +180,10 @@ public class SimpleFeatureManager {
 
     /**
      * 新建一个点要素
-     *
+     * @deprecated 
      * @param point 点对象
      * @param poiid 点ID
-     * @param fieldDefination 字段定义及数据类型
+     * @param fieldDefinition 字段定义及数据类型
      * @param fieldValue 字段值
      * @return 点要素对象
      * @throws Exception
@@ -218,6 +218,16 @@ public class SimpleFeatureManager {
         return sfeature;
     }
 
+    /**
+     * 新建一个点要素
+     * @deprecated 
+     * @param point 点对象
+     * @param poiid 点ID
+     * @param fieldDefinition 字段定义及数据类型
+     * @param fieldValue 字段值
+     * @return 点要素对象
+     * @throws Exception
+     */
     public static SimpleFeature createOnePointFeature2(Point point, String poiid,
             Map<String, String> fieldDefinition, Map<String, Object> fieldValue) throws Exception {
         int sFieldDefinationCount = fieldDefinition.size();
@@ -247,8 +257,18 @@ public class SimpleFeatureManager {
         return sfeature;
     }
     
+    /**
+     * 新建一个线要素
+     * @deprecated 
+     * @param lineString 线对象
+     * @param lineID 线ID
+     * @param fieldDefinition 字段定义及数据类型
+     * @param fieldValue 字段值
+     * @return 线要素对象
+     * @throws Exception
+     */
     public static SimpleFeature createOneLineStringFeature(LineString lineString, String lineID,
-            Dictionary<String, String> fieldDefinition, Dictionary<String, Object> fieldValue) throws Exception {
+            Map<String, String> fieldDefinition, Map<String, Object> fieldValue) throws Exception {
         int sFieldDefinationCount = fieldDefinition.size();
         int sFieldValueCount = fieldValue.size();
         if (sFieldDefinationCount != sFieldValueCount) {
@@ -257,9 +277,9 @@ public class SimpleFeatureManager {
         String sRestFeatureType = "";
         ArrayList<Object> sRestFieldValue = new ArrayList<Object>();
 
-        for (Enumeration e = fieldDefinition.keys(); e.hasMoreElements();) {
-            sRestFeatureType += e.toString() + ":" + fieldDefinition.get(e) + ",";
-            sRestFieldValue.add(fieldValue.get(e));
+        for (Map.Entry<String, String> entry : fieldDefinition.entrySet()) {
+            sRestFeatureType += entry.getKey() + ":" + entry.getValue() + ",";
+            sRestFieldValue.add(fieldValue.get(entry.getKey()));// 写入属性值
         }
         final SimpleFeatureType TYPE = DataUtilities.createType("Location",
                 "Location:LineString,"
@@ -275,8 +295,18 @@ public class SimpleFeatureManager {
         return sfeature;
     }
 
+    /**
+     * 新建一个线性环要素 
+     * @deprecated 
+     * @param linearRing 环对象
+     * @param ringID 环ID
+     * @param fieldDefinition 字段定义及数据类型
+     * @param fieldValue 字段值
+     * @return 环要素对象
+     * @throws Exception
+     */
     public static SimpleFeature createOneLinearRingFeature(LinearRing linearRing, String ringID,
-            Dictionary<String, String> fieldDefinition, Dictionary<String, Object> fieldValue) throws Exception {
+            Map<String, String> fieldDefinition, Map<String, Object> fieldValue) throws Exception {
         int sFieldDefinationCount = fieldDefinition.size();
         int sFieldValueCount = fieldValue.size();
         if (sFieldDefinationCount != sFieldValueCount) {
@@ -285,9 +315,9 @@ public class SimpleFeatureManager {
         String sRestFeatureType = "";
         ArrayList<Object> sRestFieldValue = new ArrayList<Object>();
 
-        for (Enumeration e = fieldDefinition.keys(); e.hasMoreElements();) {
-            sRestFeatureType += e.toString() + ":" + fieldDefinition.get(e) + ",";
-            sRestFieldValue.add(fieldValue.get(e));
+        for (Map.Entry<String, String> entry : fieldDefinition.entrySet()) {
+            sRestFeatureType += entry.getKey() + ":" + entry.getValue() + ",";
+            sRestFieldValue.add(fieldValue.get(entry.getKey()));// 写入属性值
         }
         final SimpleFeatureType TYPE = DataUtilities.createType("Location",
                 "Location:LinearRing,"
@@ -303,9 +333,19 @@ public class SimpleFeatureManager {
         return sfeature;
     }
 
+    /**
+     * 新建一个多边形要素
+     * @deprecated 
+     * @param polygon 多边形对象
+     * @param polygonID 多边形ID
+     * @param fieldDefinition 字段定义及数据类型
+     * @param fieldValue 字段值
+     * @return 多边形要素
+     * @throws Exception
+     */
     public static SimpleFeature createOnePolygonFeature(Polygon polygon, String polygonID,
-            Dictionary<String, String> fieldDefination, Dictionary<String, Object> fieldValue) throws Exception {
-        int sFieldDefinationCount = fieldDefination.size();
+            Map<String, String> fieldDefinition, Map<String, Object> fieldValue) throws Exception {
+        int sFieldDefinationCount = fieldDefinition.size();
         int sFieldValueCount = fieldValue.size();
         if (sFieldDefinationCount != sFieldValueCount) {
             throw new Exception("字段定义与值数目不相等");
@@ -313,9 +353,9 @@ public class SimpleFeatureManager {
         String sRestFeatureType = "";
         ArrayList<Object> sRestFieldValue = new ArrayList<Object>();
 
-        for (Enumeration e = fieldDefination.keys(); e.hasMoreElements();) {
-            sRestFeatureType += e.toString() + ":" + fieldDefination.get(e) + ",";
-            sRestFieldValue.add(fieldValue.get(e));
+        for (Map.Entry<String, String> entry : fieldDefinition.entrySet()) {
+            sRestFeatureType += entry.getKey() + ":" + entry.getValue() + ",";
+            sRestFieldValue.add(fieldValue.get(entry.getKey()));// 写入属性值
         }
         final SimpleFeatureType TYPE = DataUtilities.createType("Location",
                 "Location:Polygon,"
@@ -332,8 +372,81 @@ public class SimpleFeatureManager {
     }
 
     /**
+     * 获取要素源的要素类型
+     * @param sTargetFeatureSource 要素源
+     * @return
+     */
+    public static SimpleFeatureType getSimpleFeatureType(SimpleFeatureSource sTargetFeatureSource)
+    {
+        return sTargetFeatureSource.getSchema();
+    }
+    
+    /**
+     * 获取要素源中字段的名称及数据类型
+     * @param sTargetFeatureSource 要素源
+     * @return
+     */
+    public static HashMap<String,Class> getSimpleFeatureFields(SimpleFeatureSource sTargetFeatureSource)
+    {
+        int sFieldsCount=sTargetFeatureSource.getSchema().getAttributeCount();
+        SimpleFeatureType sType=sTargetFeatureSource.getSchema();
+        HashMap<String,Class> sFields=new HashMap<String,Class>();
+        for (int i = 0; i < sFieldsCount; i++) {
+            sFields.put(sType.getType(i).getName().toString(), sType.getType(i).getBinding());
+        }
+        return sFields;
+    }
+    
+    /**
+     * 将几何图形添加到要素源中
+     * @param sTargetFeatureSource 要素源
+     * @param sTargetGeometry 几何图形
+     * @param sFieldValue 属性值
+     * @return 添加结果
+     */
+    public static boolean addGeometryToFeatureSource(SimpleFeatureSource sTargetFeatureSource,Geometry sTargetGeometry,Map<String,Object> sFieldValue)
+    {
+        //构建要素
+        final SimpleFeatureType type = getSimpleFeatureType(sTargetFeatureSource);
+        SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(type);
+        featureBuilder.add(sTargetGeometry);
+        HashMap<String,Class> sFieldDefinition = getSimpleFeatureFields(sTargetFeatureSource);
+        for (Map.Entry<String, Class> entry : sFieldDefinition.entrySet()) {
+            if (sFieldValue.containsKey(entry.getKey()) == true) {
+                featureBuilder.set(entry.getKey(), sFieldValue.get(entry.getKey())); // 写入属性值
+            }
+        }
+        SimpleFeature simpleFeature = featureBuilder.buildFeature(null);
+        //构建事务，添加要素
+        Transaction transaction = new DefaultTransaction("Append");
+        DefaultFeatureCollection collection = new DefaultFeatureCollection();
+        collection.add(simpleFeature);
+        try {
+            if (sTargetFeatureSource instanceof SimpleFeatureStore) {
+                SimpleFeatureStore featureStore = (SimpleFeatureStore) sTargetFeatureSource;
+                featureStore.setTransaction(transaction);
+                try {
+                    featureStore.addFeatures(collection);
+                    transaction.commit();
+                } catch (Exception problem) {
+                    problem.printStackTrace();
+                    transaction.rollback();
+                } finally {
+                    transaction.close();
+                }
+            } else {
+                System.out.println(sTargetFeatureSource.getSchema().toString() + " does not support read/write access");
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    /**
      * 将要素添加至目标源
-     *
+     * @deprecated 
      * @param sTargetFeatureSource 目标要素源
      * @param sTargetFeature 目标要素
      * @return 是否添加成功
@@ -376,7 +489,7 @@ public class SimpleFeatureManager {
 
     /**
      * 从要素源中删除指定要素
-     *
+     * @deprecated 
      * @param sTargetFeatureSource 要素源
      * @param sTargetFeature 指定的要素
      * @return 删除是否成功
@@ -520,24 +633,24 @@ public class SimpleFeatureManager {
         String MESHID = "3";
         String OWNER = "cy";
         //Dictionary<String,Class> fieldDefination =new Dictionary<String,Class>();
-        Map<String, String> fieldDefinition = new HashMap<String, String>();
-        fieldDefinition.put("MeShID", "String");
-        fieldDefinition.put("Owner", "String");
+        //Map<String, String> fieldDefinition = new HashMap<String, String>();
+        //fieldDefinition.put("MeShID", "String");
+        //fieldDefinition.put("Owner", "String");
         //fieldDefinition.put("wtf", "String");
         Map<String, Object> fieldValue = new HashMap<String, Object>();
-        fieldValue.put("MeShID", "2");
-        fieldValue.put("Owner", "wxy");
+        fieldValue.put("pop", "54");
+        fieldValue.put("sum", "2");
        // fieldValue.put("wtf", "wtf");
 
         Point testPoint = createOnePoint(latitude, longitude);
-        SimpleFeature simpleFeature = createOnePointFeature2(testPoint, POIID, fieldDefinition, fieldValue);
+        //SimpleFeature simpleFeature = createOnePointFeature2(testPoint, POIID, fieldDefinition, fieldValue);
         File newFile = new File("F:\\ArcGISDoc\\suzhou\\test.shp");
         FileDataStore store = FileDataStoreFinder.getDataStore(newFile);
         SimpleFeatureSource featureSource = store.getFeatureSource();
         //SimpleFeatureStore featureStore = (SimpleFeatureStore) featureSource;  
         try
         {
-            System.out.println(addFeatureToFeatureSource(featureSource, simpleFeature));
+            System.out.println(addGeometryToFeatureSource(featureSource, testPoint,fieldValue));
         }
         catch(Exception e)
         {
