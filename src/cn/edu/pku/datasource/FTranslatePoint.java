@@ -19,7 +19,14 @@ import org.geotools.map.MapViewport;
  */
 public class FTranslatePoint {
     public void FTranslatePoint(){}
-    public Coordinate [] ScreenToWorld (Point [] pointArray, MapViewport  viewport ){
+    
+    /**
+     * 由屏幕点序列转换为坐标点序列
+     * @param pointArray 屏幕点列
+     * @param viewport 地图视窗
+     * @return
+     */
+    public static Coordinate [] ScreenToWorld (java.awt.Point [] pointArray, MapViewport  viewport ){
        Coordinate[] worldPoints=new Coordinate[pointArray.length];
        FTranslatePoint translatePoint=new FTranslatePoint();
        for(int i=0;i<pointArray.length;i++){
@@ -27,10 +34,30 @@ public class FTranslatePoint {
             }
        return  worldPoints;
     };
-    public Coordinate  ScreenToWorld (Point point, MapViewport  viewport ){
+    
+    /**
+     * 由屏幕点转换为坐标点
+     * @param point 屏幕点
+     * @param viewport 地图视窗
+     * @return
+     */
+    public static Coordinate  ScreenToWorld (java.awt.Point point, MapViewport  viewport ){
        AffineTransform ScreenToWorld = viewport.getScreenToWorld(); 
        Point2D disPoint= ScreenToWorld.transform(point, null);
        Coordinate worldPoint =new Coordinate(disPoint.getX(), disPoint.getY());      
        return  worldPoint;
     }; 
+    
+    /**
+     * 由坐标点转换为屏幕点
+     * @param sPoint 坐标点
+     * @param viewport 地图视窗
+     * @return
+     */
+    public static java.awt.Point WorldToScreen (Coordinate sPoint, MapViewport  viewport)
+    {
+        AffineTransform worldToScreen = viewport.getWorldToScreen();
+        Point2D disPoint=worldToScreen.transform(new Point2D.Double(sPoint.x,sPoint.y) , null);
+        return new Point((int)disPoint.getX(),(int)disPoint.getY());
+    }
 }
