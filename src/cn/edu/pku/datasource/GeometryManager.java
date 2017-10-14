@@ -238,5 +238,11 @@ public class GeometryManager {
         }
         return false;
     }
+    
+    public static boolean isPointOnLine(Point sPoint,LineString line,double tolerance)
+    {
+        Geometry sBuffer= line.buffer(tolerance);
+        return sBuffer.intersects(sPoint);
+    }
 
 }
